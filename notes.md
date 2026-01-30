@@ -10,8 +10,8 @@ layout: single
 {% for entry in site.data.files %}
   {% if entry.type == "notes" %}
     <li>
-      <a href="/files/{{ entry.repo }}.pdf">
-        {{ entry.repo | replace: "_", " " }}
+      <a href="/files/{{ entry.name }}.pdf">
+        {{ entry.name | replace: "_", " " }}
       </a>
     </li>
   {% endif %}
