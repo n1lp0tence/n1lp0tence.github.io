@@ -2,6 +2,7 @@
 title: "Notes"
 permalink: /notes/
 layout: single
+mathjax: true
 ---
 
 Notes for courses and readings.

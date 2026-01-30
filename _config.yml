@@ -7,6 +7,8 @@ masthead_title: "Home"
 remote_theme: "mmistakes/minimal-mistakes"
 minimal_mistakes_skin: "dark" # try "dark", "neon", "mint", etc.
 
+mathjax: true
+
 include:
   - .htaccess
 
@@ -21,7 +23,6 @@ markdown: kramdown
 kramdown:
   input: GFM
 
-
 collections:
   blog:
     output: true
@@ -29,3 +30,10 @@ collections:
     output: true
   notes:
     output: true
+
+defaults:
+  - scope:
+      path: ""
+      type: blog
+    values:
+      mathjax: true

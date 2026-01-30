@@ -2,6 +2,7 @@
 title: "Papers"
 permalink: /papers/
 layout: single
+mathjax: true
 ---
 
 This page lists my formal writings, both published and unpublished. PDFs are provided.
