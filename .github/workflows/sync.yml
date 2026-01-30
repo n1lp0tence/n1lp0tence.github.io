@@ -33,32 +33,33 @@ jobs:
 
           [[ -f "$LIST" ]] || { echo "Missing $LIST"; exit 1; }
 
+          # Optional but very helpful: fail early if JSON is invalid
+          jq -e '.' "$LIST" >/dev/null
+
           changed=0
 
-          # Read non-empty, non-comment lines
-          jq -c '.[]' "$LIST" | while read -r entry; do
-            repo_slug="$(echo "$entry" | jq -r '.repo')"
-            type="$(echo "$entry" | jq -r '.type')"
+          # Iterate JSON entries WITHOUT a pipe-subshell
+          while IFS= read -r entry; do
+            repo_slug="$(jq -r '.repo' <<<"$entry")"
+            type="$(jq -r '.type' <<<"$entry")"
 
-            [[ -z "$repo_slug" ]] && continue
+            [[ -z "$repo_slug" || "$repo_slug" == "null" ]] && continue
 
             full_repo="$OWNER/$repo_slug"
             dest="files/${repo_slug}.pdf"
 
-            echo "== Syncing $full_repo@$TAG ($ASSET -> $dest) =="
+            echo "== Syncing $full_repo@$TAG ($ASSET -> $dest) [$type] =="
 
             tmpdir="$(mktemp -d)"
             rel_json="$tmpdir/release.json"
             newfile="$tmpdir/new.pdf"
 
-            # 1) Get release by tag
             curl -fsSL \
               -H "Authorization: token $TOKEN" \
               -H "Accept: application/vnd.github+json" \
               "https://api.github.com/repos/$full_repo/releases/tags/$TAG" \
               > "$rel_json"
 
-            # 2) Find asset id for ASSET
             asset_id="$(jq -r --arg name "$ASSET" '.assets[] | select(.name==$name) | .id' "$rel_json" | head -n1)"
             if [[ -z "${asset_id:-}" || "$asset_id" == "null" ]]; then
               echo "ERROR: asset '$ASSET' not found in release $full_repo@$TAG"
@@ -67,14 +68,12 @@ jobs:
               exit 1
             fi
 
-            # 3) Download asset bytes
             curl -fsSL \
               -H "Authorization: token $TOKEN" \
               -H "Accept: application/octet-stream" \
               "https://api.github.com/repos/$full_repo/releases/assets/$asset_id" \
               -o "$newfile"
 
-            # 4) Hash compare + update
             if [[ -f "$dest" ]]; then
               oldhash="$(sha256sum "$dest" | awk '{print $1}')"
               newhash="$(sha256sum "$newfile" | awk '{print $1}')"
@@ -91,7 +90,7 @@ jobs:
             mv "$newfile" "$dest"
             rm -rf "$tmpdir"
             changed=1
-          done < "$LIST"
+          done < <(jq -c '.[]' "$LIST")
 
           echo "CHANGED=$changed" >> "$GITHUB_ENV"
 
