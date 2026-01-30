@@ -4,7 +4,7 @@ permalink: /notes/
 layout: single
 ---
 
-## Notes
+Notes for courses and readings.
 
 <ul>
 {% for entry in site.data.files %}

@@ -4,9 +4,9 @@ permalink: /papers/
 layout: single
 ---
 
+This page lists my formal writings, both published and unpublished. PDFs are provided.
 
-## Papers
-
+### Expository Papers
 
 <ul>
 {% for entry in site.data.files %}
