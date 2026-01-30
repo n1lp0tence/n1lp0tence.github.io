@@ -37,7 +37,7 @@ jobs:
 
           # Read non-empty, non-comment lines
           jq -c '.[]' "$LIST" | while read -r entry; do
-            repo_slug="$(echo "$entry" | jq -r '.name')"
+            repo_slug="$(echo "$entry" | jq -r '.repo')"
             type="$(echo "$entry" | jq -r '.type')"
 
             [[ -z "$repo_slug" ]] && continue

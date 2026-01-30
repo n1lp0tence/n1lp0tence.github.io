@@ -1,14 +1,17 @@
 [
     {
-      "name": "The_Kronecker_Weber_Theorem.pdf",
+      "repo": "The_Kronecker_Weber_Theorem",
+      "name": "The Kronecker Weber Theorem",
       "type": "paper"
     },
     {
-      "name": "Introduction_to_C_Infinity_Rings.pdf",
+      "repo": "Introduction_to_C_Infinity_Rings",
+      "name": "Introduction to C^infty Rings",
       "type": "paper"
     },
     {
-      "name": "Algebraic_Geometry.pdf",
+      "repo": "Algebraic_Geometry",
+      "name": "Algebraic Geometry",
       "type": "notes"
     }
   ]
