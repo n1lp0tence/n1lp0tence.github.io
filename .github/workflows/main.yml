@@ -16,27 +16,6 @@ jobs:
 
       - name: Ensure /files directory exists
         run: mkdir -p files
-
-      - name: Debug token access (safe)
-        env:
-          TOKEN: ${{ secrets.SOURCE_REPO_TOKEN }}
-        run: |
-          set -euo pipefail
-          REPO="n1lp0tence/Introduction_to_C_Infinity_Rings"
-      
-          echo "== viewer =="
-          curl -sS -D - \
-            -H "Authorization: Bearer $TOKEN" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            https://api.github.com/user \
-            -o /dev/null | sed -n '1,20p'
-      
-          echo "== repo =="
-          curl -sS -D - \
-            -H "Authorization: Bearer $TOKEN" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            https://api.github.com/repos/$REPO \
-            -o /dev/null | sed -n '1,20p'
       
       - name: Download Introduction to C-Infinity Rings
         uses: robinraju/release-downloader@v1
@@ -70,4 +49,4 @@ jobs:
 
           git add files/
           git commit -m "chore: sync PDFs from private releases"
-          git pus
+          git push
